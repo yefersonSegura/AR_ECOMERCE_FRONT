@@ -1,0 +1,226 @@
+<div class="grid card">
+    <div class="col-12 md:col-12 layout-main-content-header">
+        <h5>
+            Productos
+        </h5>
+    </div>
+    <div class="col-12 md:col-12">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <button pButton type="button" label="Nuevo" icon="fa fa-floppy-o" class="p-button-link mr:col-2"
+                    (click)="visible=true;"></button>
+            </div>
+        </p-toolbar>
+    </div>
+    <div class="col-12 md:col-12 mt-3">
+        <p-table [value]="products" [columns]="cols" styleClass="p-datatable-sm" [paginator]="false" [lazy]="false"
+            [loading]="loading" [responsive]="true" scrollHeight="460px" [scrollable]="true" dataKey="categoryID"
+            [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    @for(col of columns;track col.field){
+                    <th
+                        [ngStyle]="{'text-align':col.align,'width':col.width,'display': col.display,'min-width':col.minWidth, 'max-width':col.maxWidth}">
+                        {{col.header}}
+                    </th>
+                    }
+                    <th style="width: 150px;">
+                        Acciones
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    @for(col of columns;track col?.id){
+                    <td class="table-cell-word-wrap"
+                        [ngStyle]="{'text-align':col.align, 'width':col.width,'display':col.display,'min-width':col.minWidth, 'max-width':col.maxWidth}">
+                        @if(!( col.type === 'date'|| col.type === 'serie'|| col.type === 'money'||col.type=='image')){
+                        <span>
+                            {{rowData[col.field]}}
+                        </span>
+                        }
+                        @if(col.type === 'date'){
+                        <span>
+                            {{rowData[col.field] | date:col.format}}
+                        </span>
+                        }
+                        @if(col.type === 'image'){
+                        <p-avatar [image]="rowData[col.field]" styleClass="mr-2" size="xlarge" shape="circle" />
+                        }
+                    </td>
+                    }
+                    <td style="width: 150px; display: flex;">
+                        <p-button icon="fa fa-edit" [rounded]="true" severity="success" [outlined]="true" class="ml-2"
+                            (click)="removeEdit(rowData)" />
+                        <p-button icon="fa fa-trash" [rounded]="true" class="ml-2" severity="danger" [outlined]="true"
+                            (click)="removeRow(rowData)" />
+                        <p-button icon="fa fa-percent" [rounded]="true" class="ml-2" severity="info" [outlined]="true"
+                            (click)="onShowModalPrometion(rowData)" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<p-dialog [modal]="true" header="Promocionar Porducto" [(visible)]="showdialogprometion" [style]="{ width: '60rem' }">
+    <span class="p-text-secondary block mb-5">Complete todos los campos</span>
+    <div class="col-12 md:col-12 mt-2">
+        <div class="p-fluid grid formgrid">
+            <div class="col-12 md:col-4 p-field">
+                <label for="nameproduct" class="font-semibold w-6rem">Nombre del Producto</label>
+                <input [(ngModel)]="selectedProduct.name" readonly="true" pInputText id="nameproduct" class="flex-auto"
+                    autocomplete="off" />
+            </div>
+            <div class="col-12 md:col-4 p-field">
+                <label for="startDate" class="font-semibold w-6rem">Fecha Inicio</label>
+                <p-calendar [(ngModel)]="promotionModel.startDate" appendTo="body" id="startDate" />
+                <small class="p-error" *ngIf="submitted && !promotionModel.startDate">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field">
+                <label for="startEnd" class="font-semibold w-6rem">Fecha Fin</label>
+                <p-calendar [(ngModel)]="promotionModel.endDate" appendTo="body" id="startEnd" />
+                <small class="p-error" *ngIf="submitted && !promotionModel.endDate">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-3">
+                <label for="title" class="font-semibold w-6rem">Titulo</label>
+                <input pInputText [(ngModel)]="promotionModel.title" id="title" class="flex-auto" autocomplete="off" />
+                <small class="p-error" *ngIf="submitted && !promotionModel.title">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-8 p-field mt-3">
+                <label for="description" class="font-semibold w-6rem">Descripción</label>
+                <input pInputText [(ngModel)]="promotionModel.description" id="description" class="flex-auto"
+                    autocomplete="off" />
+                <small class="p-error" *ngIf="submitted && !promotionModel.description">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-3">
+                <label for="image" class="font-semibold w-6rem">Imagen</label>
+                <input type="file" pInputText id="image" class="flex-auto" (change)="onFileSelectedfileimage($event)"
+                    accept="image/*" />
+                <small class="p-error" *ngIf="submitted && !promotionModel.base64Url">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-3">
+                <label for="discount" class="font-semibold w-6rem">Descuento</label>
+                <p-inputGroup>
+                    <input type="number" pInputText placeholder="Price" [(ngModel)]="promotionModel.discount" />
+                    <p-inputGroupAddon>%</p-inputGroupAddon>
+                </p-inputGroup>
+                <small class="p-error" *ngIf="submitted && !promotionModel.discount">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-3">
+                <label for="description" class="font-semibold w-6rem">Color</label>
+                <p-inputGroupAddon><p-colorPicker [(ngModel)]="promotionModel.color"
+                        appendTo="body" /></p-inputGroupAddon>
+                <small class="p-error" *ngIf="submitted && !promotionModel.color">Campo requerido</small>
+            </div>
+
+        </div>
+    </div>
+    <div class="flex justify-content-end gap-2">
+        <p-button label="Cancelar" severity="secondary" (onClick)="visible = false" />
+        <p-button label="Guardar" (onClick)="savePromotion()" />
+    </div>
+
+</p-dialog>
+
+<p-dialog [modal]="true" header="Promociones" [(visible)]="showdialogprometions" [style]="{ width: '60rem' }">
+    <span class="p-text-secondary block mb-5">Promociones registrados</span>
+    <div class="col-12 md:col-12 mt-2">
+        <p-table [value]="promotions" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="caption">
+                <p-button label="Nueva promoción" [link]="true" (click)="showdialogprometion=true" />
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Descuentoth>
+                    <th>Imagen</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-promotion>
+                <tr>
+                    <td>{{ promotion.title }}</td>
+                    <td>{{ promotion.description }}</td>
+                    <td>{{ promotion.discount }}</td>
+                    <td> <p-avatar [image]="promotion.imageUrl" styleClass="mr-2" size="xlarge" shape="circle" /></td>
+                    <td style="width: 150px; display: flex;">
+                        <p-button icon="fa fa-edit" [rounded]="true" severity="success" [outlined]="true" class="ml-2"
+                            (click)="removeEditPromotion(promotion)" />
+                        <p-button icon="fa fa-trash" [rounded]="true" class="ml-2" severity="danger" [outlined]="true"
+                            (click)="removeRowPromotion(promotion)" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-dialog>
+
+<p-dialog header="Nuevo Producto" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem',height:'35rem'}">
+    <span class="p-text-secondary block mb-5">Complete todos los campos.</span>
+    <div class="col-12 md:col-12 mt-5">
+        <div class="p-fluid grid formgrid">
+            <div class="col-12 md:col-4 p-field">
+                Categoria:
+            </div>
+            <div class="col-12 md:col-8 p-field">
+                <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" optionLabel="categoryName"
+                    [filter]="true" filterBy="categoryName" [showClear]="true" placeholder="---Seleccione--">
+                    <ng-template pTemplate="selectedItem" let-selectedOption [virtualScroll]="true"
+                        [virtualScrollItemSize]="18">
+                        <div class="flex align-items-center gap-2">
+                            <div>{{ selectedOption.categoryName}}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-country pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <div>{{ country.categoryName }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+                <small class="p-error" *ngIf="submitted && !productModel.categoryID">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field">
+                Nombre:
+            </div>
+            <div class="col-12 md:col-8 p-field mt-2">
+                <input pInputText id="firstName" class="flex-auto" [(ngModel)]="productModel.name" />
+                <small class="p-error" *ngIf="submitted && !productModel.name">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-2">
+                Descripción:
+            </div>
+            <div class="col-12 md:col-8 p-field mt-2">
+                <input pInputText id="firstName" class="flex-auto" [(ngModel)]="productModel.description" />
+                <small class="p-error" *ngIf="submitted && !productModel.description">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-2">
+                Precio:
+            </div>
+            <div class="col-12 md:col-8 p-field mt-2">
+                <input pInputText id="firstName" class="flex-auto" [(ngModel)]="productModel.price" />
+                <small class="p-error" *ngIf="submitted && !productModel.price">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-2">
+                Stock:
+            </div>
+            <div class="col-12 md:col-8 p-field mt-2">
+                <input pInputText id="firstName" class="flex-auto" [(ngModel)]="productModel.stock" />
+                <small class="p-error" *ngIf="submitted && !productModel.stock">Campo requerido</small>
+            </div>
+            <div class="col-12 md:col-4 p-field mt-2">
+                Imagen:
+            </div>
+            <div class="col-12 md:col-8 p-field mt-2">
+                <input type="file" pInputText id="firstName" class="flex-auto" (change)="onFileSelected($event)"
+                    accept="image/*" />
+                <small class="p-error" *ngIf="submitted && !productModel.base64Url">Campo requerido</small>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button label="Guardar" [outlined]="true" [loading]="loadingSaveProduct" severity="secondary"
+            (onClick)="saveProduct()" />
+        <p-button label="Cancelar" [text]="true" severity="secondary" (onClick)="visible = false" />
+    </ng-template>
+</p-dialog>

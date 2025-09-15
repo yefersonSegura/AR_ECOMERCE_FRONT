@@ -1,0 +1,84 @@
+@if(isSucces){
+<section class="section-padding">
+    <div class="container">
+
+        <div class="separator mb-3 mt-5">
+            <div class="line"></div>
+            <h3 class="mb-0 h3 fw-bold">¡Hecho!</h3>
+            <div class="line"></div>
+        </div>
+
+        <div class="border p-4 text-center w-100">
+            <h5 class="fw-bold mb-2">Grcias por escribirnos</h5>
+            <p class="mb-0">Hemos recibido su mensaje. Le responderemos lo antes posible.</p>
+        </div>
+
+    </div>
+</section>
+}@else {
+<section class="section-padding mt-5">
+    <section class="section-padding">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-xl-12">
+                    <h3 class="fw-bold">Libro de Reclamaciones</h3>
+                    <br>
+                    <h4>AR ACCESORIOS - RUC 10706925541</h4>
+                    <p>
+                        Conforme al código de Protección y Defensa del Consumidor, ponemos a tu disposición el Libro de
+                        Reclamaciones en caso desees ingresar un reclamo o queja respecto al servicio o producto
+                        recibido.
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-xl-8">
+                    <div class="p-4 border">
+                        <div class="form-body">
+                            <h4 class="mb-0 fw-bold">Dejenos un mensaje</h4>
+                            <div class="my-3 border-bottom"></div>
+                            <div class="mb-3">
+                                <label class="form-label">Ingrese su Nombre</label>
+                                <input type="text" class="form-control rounded-0" [(ngModel)]="model.name">
+                                <small class="p-error" *ngIf="submitted && !model.name">Campo requerido</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ingrese su Apellido</label>
+                                <input type="text" class="form-control rounded-0" [(ngModel)]="model.lastName">
+                                <small class="p-error" *ngIf="submitted && !model.lastName">Campo requerido</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ingrese su Email</label>
+                                <input type="text" class="form-control rounded-0" [(ngModel)]="model.email">
+                                <small class="p-error" *ngIf="submitted && !model.email">Campo requerido</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ingrese su Número de celular</label>
+                                <input type="text" class="form-control rounded-0" [(ngModel)]="model.number">
+                                <small class="p-error" *ngIf="submitted && !model.number">Campo requerido</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Detalle</label>
+                                <textarea class="form-control rounded-0" rows="4" cols="4"
+                                    [(ngModel)]="model.message"></textarea>
+                                <small class="p-error" *ngIf="submitted && !model.message">Campo requerido</small>
+                            </div>
+                            <div class="mb-0">
+                                <a href="javascript:;" class="btn btn-dark btn-ecomm" (click)="sendMenssage()">Enviar
+                                    Mensaje</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="p-3 border">
+                        <div class="address mb-3">
+                            <img src="/images/about.png" class="img-fluid" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+}

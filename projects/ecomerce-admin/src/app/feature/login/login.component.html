@@ -1,0 +1,31 @@
+<div class=" bg-primary-reverse bg-primary-50">
+    <div class="flex justify-content-center">
+        <div class="w-full lg:w-5 h-screen text-center flex justify-content-center align-items-start">
+            <div class="z-5 w-full lg:w-8 px-6 text-center mt-8 login-Container">
+                <div class="w-full flex align-items-center justify-content-center">
+                    <img src="img/arLogo.png" alt="" class="w-6rem">
+                </div>
+                <h1 class="text-4xl font-light mt-4 " style="color:#ffff; font-weight: bold;">Inicia sesión</h1>
+                <p style="color:#ffff;">Bienvenido,Inicia sesión para gestionar tu e-commerce de manera eficiente.</p>
+                <div class="mt-5 text-left">
+                    <label for="username" class="block mb-2" style="color:#ffff">Username</label>
+                    <span class="p-input-icon-right block">
+                        <i class="pi pi-user"></i>
+                        <input id="username" type="email" pInputText class="w-full" [(ngModel)]="user">
+                    </span>
+
+                    <label for="password" class="block mb-2 mt-3" style="color:#ffff">Password</label>
+                    <span class="p-input-icon-right block">
+                        <i class="pi pi-lock"></i>
+                        <input type="password" pInputText class="w-full" [(ngModel)]="pass">
+                    </span>
+                    <br>
+                    <div class="flex align-items-center justify-content-between mt-4 gap-3">
+                        <button pButton type="button" (click)="login()" label="Login" class="w-10rem" [style]="{'background':'#ffff','color':'black'}"></button>
+                        <a href="#"  style="color:#ffff" class="secondary-button">Forgot Password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  

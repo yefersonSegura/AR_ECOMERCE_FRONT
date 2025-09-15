@@ -1,0 +1,30 @@
+<section class="section-padding" [ngStyle]="{ display: isHidden ? 'none' : 'block' }">
+    <div class="container">
+        <div class="text-center pb-3">
+            <h3 class="mb-0 h3 fw-bold">Productos destacados</h3>
+            <!-- <p class="mb-0 text-capitalize">The purpose of lorem ipsum</p> -->
+        </div>
+        <div class="product-thumbs">
+            @for(item of products;track item.categoryID){
+            <div class="card" (click)="navigateDetail(item)" style="cursor: pointer;">
+                <div class="position-relative overflow-hidden">
+                    <div
+                        class="product-options d-flex align-items-center justify-content-center gap-2 mx-auto position-absolute bottom-0 start-0 end-0">
+                        <a href="javascript:;"><i class="bi bi-basket3"></i></a>
+                    </div>
+                    <a>
+                        <img [src]="item.urlImage" class="card-img-top" alt="...">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="product-info text-center">
+                        <h6 class="mb-1 fw-bold product-name">{{item.name}}</h6>
+                        <p class="mb-0 h6  product-price">S/.{{item.price}}</p>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+
+    </div>
+</section>

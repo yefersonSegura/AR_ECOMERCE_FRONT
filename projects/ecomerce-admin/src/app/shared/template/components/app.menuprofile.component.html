@@ -1,0 +1,19 @@
+<div class="layout-menu-profile">
+    <button class="p-link border-noround" (click)="toggleMenu()" pTooltip="Profile" [tooltipDisabled]="isTooltipDisabled">
+        <img src="img/avatar.png" alt="avatar" style="width: 32px; height: 32px;">
+        <span>
+            <strong>{{user.firstName??""}}</strong>
+            <small>{{user.email??""}}</small>
+        </span>
+        <i class="layout-menu-profile-toggler pi pi-fw" [ngClass]="{'pi-angle-down': menuProfilePosition === 'start' || isHorizontal, 'pi-angle-up': menuProfilePosition === 'end' && !isHorizontal}"></i>
+    </button>
+
+    <ul *ngIf="menuProfileActive" [@menu]="isHorizontal ? 'overlay' : 'inline'">
+        <li pTooltip="Logout" [tooltipDisabled]="isTooltipDisabled">
+            <button class="p-link" (click)="authState.loggout()" >
+                <i class="pi pi-power-off pi-fw"></i>
+                <span>Cerrar sesión</span>
+            </button>
+        </li>
+    </ul>
+</div>

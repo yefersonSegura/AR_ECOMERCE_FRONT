@@ -1,0 +1,55 @@
+<section class="section-padding mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 col-xl-5 col-xxl-4 mx-auto">
+                <div class="card rounded-0">
+                    <div class="card-body p-4">
+                        <h4 class="mb-0 fw-bold text-center">Registro de usuario</h4>
+                        <hr>
+                        <div class="row g-4">
+                            <div id="liveAlertPlaceholder"></div>
+                            <div class="col-12">
+                                <label for="exampleName" class="form-label">Nombre</label>
+                                <input type="text" class="form-control rounded-0" id="exampleName" [(ngModel)]="model.firstName">
+                            </div>
+                            <div class="col-12">
+                                <label for="exampleName" class="form-label">Apellido</label>
+                                <input type="text" class="form-control rounded-0" id="exampleName" [(ngModel)]="model.lastName">
+                            </div>
+                            <div class="col-12">
+                                <label for="exampleMobile" class="form-label">Celular</label>
+                                <input type="text" class="form-control rounded-0" id="exampleMobile" [(ngModel)]="model.phone">
+                            </div>
+                            <div class="col-12">
+                                <label for="exampleEmail" class="form-label">Correo electrónico</label>
+                                <input type="text" class="form-control rounded-0" id="exampleEmail" [(ngModel)]="model.email">
+                            </div>
+                            <div class="col-12">
+                                <label for="examplePassword" class="form-label">Contraseña</label>
+                                <input type="text" class="form-control rounded-0" id="examplePassword" [(ngModel)]="model.password">
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [(ngModel)]="model.acceptTerms">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Acepto los términos y condiciones
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <hr class="my-0">
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn btn-dark rounded-0 btn-ecomm w-100" (click)="saveCustomer()">Registrar</button>
+                            </div>
+                            <div class="col-12 text-center">
+                                <p class="mb-0 rounded-0 w-100">¿Ya tienes una cuenta? <a href="javascript:;"
+                                        class="text-danger" (click)="navigateToLogin()">Iniciar sesión</a></p>
+                            </div>
+                        </div><!---end row-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
