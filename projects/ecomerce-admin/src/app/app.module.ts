@@ -25,6 +25,12 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { environment } from '../environments/environment';
+import { DataViewModule } from 'primeng/dataview';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { CommonService } from '../../../services/src/lib/config/services/common.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +58,10 @@ import { environment } from '../environments/environment';
     CalendarModule,
     InputGroupModule,
     InputGroupAddonModule,
-    ColorPickerModule
+    ColorPickerModule,
+    DataViewModule,
+    InputTextareaModule,
+    ConfirmDialogModule
   ],
   providers:[
     AppConfig,
@@ -61,6 +70,8 @@ import { environment } from '../environments/environment';
       useFactory: initializeApp,
       deps: [AppConfig], multi: true
     },
+    ConfirmationService,
+    CommonService
   ],
   bootstrap: [AppComponent]
 })

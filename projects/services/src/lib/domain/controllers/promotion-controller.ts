@@ -71,4 +71,24 @@ export class PromotionController {
             });
         });
     }
+    deletePromotions(promotionsID: number) {
+        return new Promise<ResponseController<string>>((response) => {
+            let controller: ResponseController<string>;
+            let msg: Message = {};
+            this.repository.deletePromotions(promotionsID).subscribe(result => {
+                if (isNullOrUndefined(result)) {
+                    msg = { severity: 'info', summary: 'Error interno del servidor', detail: '' };
+                    controller = { messageAlert: msg, error: true, event: false };
+                } else {
+                    if (!result?.isSuccessful) {
+                        msg = { severity: 'error', summary: '', detail: result?.message, };
+                        controller = { messageAlert: msg, error: true, event: false, help: result?.result };
+                    } else {
+                        controller = { body: result.message ?? "", error: false, event: false };
+                    }
+                }
+                return response(controller);
+            });
+        });
+    }
 }

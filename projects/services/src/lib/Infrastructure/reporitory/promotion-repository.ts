@@ -25,4 +25,9 @@ export class PromotionService {
     savePromotion(promotion: PromotionDto): Observable<IBaseResponse | null> {
         return this.http.post<IResponse<PromotionDto>>(`${PromotionApi.savePromotion}`, promotion);
     }
+    deletePromotions(idPromotion: number): Observable<IBaseResponse | null> {
+        let prms = new HttpParams();
+        prms = prms.set('promotionsID', idPromotion);
+        return this.http.delete<IResponse<PromotionDto>>(`${PromotionApi.deletePromotions}`, prms);
+    }
 }

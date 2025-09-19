@@ -5,6 +5,9 @@ import { alertsMessage, isNullOrUndefined, PromotionController, WharehouseContro
 import { CategoryDto } from '../../../../../services/src/lib/Infrastructure/dto/category-dto';
 import { PromotionModel } from '../../../../../services/src/lib/domain/models/promotion-model';
 import { PromotionsDto } from '../../../../../services/src/lib/Infrastructure/dto/promotions-dto';
+import { DataView } from 'primeng/dataview';
+import { ImageCacheService } from '../../../../../services/src/lib/config/services/Image.cache.service';
+import { CommonService } from '../../../../../services/src/lib/config/services/common.service';
 
 @Component({
   selector: 'app-products',
@@ -27,7 +30,11 @@ export class ProductsComponent implements OnInit {
   promotionModel: PromotionModel = {};
   selectedProduct: ProductDto = {};
   promotions: PromotionsDto[] = [];
-  constructor(private wharehouseController: WharehouseController, private promotionControler: PromotionController) { }
+  sortOrder: number = 0;
+  sortField: string = '';
+  constructor(private wharehouseController: WharehouseController,
+    private promotionControler: PromotionController,
+    private imageCache: ImageCacheService, private commonService: CommonService) { }
   ngOnInit(): void {
     this.cols = [
       { field: 'urlImage', header: 'Imagen', type: 'image', align: 'left', format: '', width: '100px', minWidth: '', maxWidth: '', display: 'table-cell' },
@@ -40,8 +47,13 @@ export class ProductsComponent implements OnInit {
     this.getCategories();
     this.getProducts();
   }
+  onFilter(dv: DataView, event: Event) {
+    dv.filter((event.target as HTMLInputElement).value);
+  }
   async getProducts() {
+    this.loading = true;
     let result = await this.wharehouseController.getProducts(0);
+    this.loading = false;
     if (result.error) {
       return;
     }
@@ -59,11 +71,20 @@ export class ProductsComponent implements OnInit {
     this.selectedCategory = this.categories.filter(p => p.categoryID == data.categoryID)[0];
     this.visible = true;
   }
+  newPromotion() {
+    this.showdialogprometions = false;
+    this.showdialogprometion = true;
+  }
   removeEditPromotion(data: PromotionsDto) {
+    this.showdialogprometions = false;
     this.promotionModel = { color: data.color, description: data.description, discount: data.discount, endDate: data.endDate ? new Date(data.endDate) : undefined, idCategory: data.idCategory, idProduct: data.idProduct, idPromotion: data.idPromotion, startDate: data.startDate ? new Date(data.startDate) : undefined, state: data.state, title: data.title };
     this.showdialogprometion = true;
   }
-  async removeRow(data: ProductDto) {
+  async removeRow(data: ProductDto, event:Event) {
+    let confirm = await this.commonService.confirmQuestion(event, "¿Seguro  que desea eliminar este producto?");
+    if (!confirm) {
+      return;
+    }
     let result = await this.wharehouseController.deleteProduct(data.productID ?? 0);
     if (result.error) {
       alertsMessage('error', result.messageAlert?.summary ?? 'Error', result.messageAlert?.detail ?? "");
@@ -71,9 +92,6 @@ export class ProductsComponent implements OnInit {
     }
     alertsMessage('success', "¡Hecho!", result.body ?? "");
     this.getProducts();
-  }
-  async removeRowPromotion(data: ProductDto) {
-
   }
   onShowModalPrometion(data: ProductDto) {
     this.selectedProduct = data;
@@ -169,5 +187,17 @@ export class ProductsComponent implements OnInit {
       return;
     }
     this.promotions = result.body ?? [];
+  }
+  async deteletePromotions(promotion: PromotionsDto, event: Event) {
+    let confirm = await this.commonService.confirmQuestion(event, "¿Seguro  que desea eliminar esta promoción?");
+    if (confirm) {
+      let result = await this.promotionControler.deletePromotions(promotion.idPromotion ?? 0);
+      this.showdialogprometions = false;
+      if (result.error) {
+        alertsMessage('error', result.messageAlert?.summary ?? 'Error', result.messageAlert?.detail ?? "");
+        return;
+      }
+      alertsMessage('success', "¡Hecho!", result.body ?? "");
+    }
   }
 }
